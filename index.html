@@ -133,44 +133,61 @@
                                 </div>
                             </div>
                             <div class="video-controls">
-                                <div class="d-flex align-items-center gap-2">
-                                    <!-- Playback Controls -->
-                                    <button class="btn btn-icon" @click="skipBackward" title="Skip -5s">
-                                        <i class="fas fa-undo"></i>
-                                    </button>
-                                    <button class="btn btn-icon" @click="togglePlay">
-                                        <i :class="isPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
-                                    </button>
-                                    <button class="btn btn-icon" @click="skipForward" title="Skip +5s">
-                                        <i class="fas fa-redo"></i>
-                                    </button>
-                                    
-                                    <!-- Timeline -->
-                                    <input type="range" class="timeline-slider" min="0" :max="videoDuration" v-model="currentTime" @input="seekVideo">
-                                    <span class="time-display">{{ formatTime(currentTime) }} / {{ formatTime(videoDuration) }}</span>
-                                    
-                                    <!-- Volume -->
-                                    <div class="volume-control">
-                                        <button class="btn btn-icon" @click="toggleMute">
-                                            <i :class="isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'"></i>
+                                <!-- Timeline Bar (Top) -->
+                                <div class="timeline-section mb-2">
+                                    <input type="range" class="timeline-slider w-100" min="0" :max="videoDuration" v-model="currentTime" @input="seekVideo">
+                                    <div class="d-flex justify-content-between time-display">
+                                        <span>{{ formatTime(currentTime) }}</span>
+                                        <span>{{ formatTime(videoDuration) }}</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Control Buttons (Bottom) -->
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <!-- Left Controls -->
+                                    <div class="d-flex align-items-center gap-2">
+                                        <!-- Playback Controls -->
+                                        <button class="btn btn-icon" @click="skipBackward" title="Skip -5s">
+                                            <i class="fas fa-backward-step"></i>
                                         </button>
-                                        <input type="range" class="volume-slider" min="0" max="100" v-model="volume" @input="setVolume">
+                                        <button class="btn btn-play" @click="togglePlay">
+                                            <i :class="isPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
+                                        </button>
+                                        <button class="btn btn-icon" @click="skipForward" title="Skip +5s">
+                                            <i class="fas fa-forward-step"></i>
+                                        </button>
+                                        
+                                        <!-- Volume -->
+                                        <div class="d-flex align-items-center gap-1">
+                                            <button class="btn btn-icon" @click="toggleMute">
+                                                <i :class="isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'"></i>
+                                            </button>
+                                            <input type="range" class="volume-slider" min="0" max="100" v-model="volume" @input="setVolume">
+                                        </div>
                                     </div>
                                     
-                                    <!-- Subtitle Toggle -->
-                                    <button class="btn btn-icon" @click="toggleSubtitleOverlay" :class="{ 'text-gold': showSubtitleOverlay }" title="Toggle Subtitles">
-                                        <i class="fas fa-closed-captioning"></i>
-                                    </button>
-                                    
-                                    <!-- Playback Speed -->
-                                    <button class="btn btn-icon" @click="cyclePlaybackSpeed" title="Playback Speed">
-                                        <span class="small">{{ playbackSpeed }}x</span>
-                                    </button>
-                                    
-                                    <!-- Fullscreen -->
-                                    <button class="btn btn-icon" @click="toggleFullscreen" title="Fullscreen">
-                                        <i class="fas fa-expand"></i>
-                                    </button>
+                                    <!-- Right Controls -->
+                                    <div class="d-flex align-items-center gap-2">
+                                        <!-- Settings Button (Global Styles) -->
+                                        <button class="btn btn-icon" @click="showGlobalStylesDialog = true" title="Subtitle Settings">
+                                            <i class="fas fa-sliders-h"></i>
+                                        </button>
+                                        
+                                        <!-- Subtitle Toggle -->
+                                        <button class="btn btn-icon" @click="toggleSubtitleOverlay" :class="{ 'text-gold': showSubtitleOverlay }" title="Toggle Subtitles">
+                                            <i class="fas fa-closed-captioning"></i>
+                                        </button>
+                                        
+                                        <!-- Playback Speed -->
+                                        <button class="btn btn-icon" @click="cyclePlaybackSpeed" title="Speed">
+                                            <span class="small fw-bold">{{ playbackSpeed }}x</span>
+                                        </button>
+                                        
+                                        <!-- Fullscreen -->
+                                        <button class="btn btn-icon" @click="toggleFullscreen" title="Fullscreen">
+                                            <i class="fas fa-expand"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -178,58 +195,6 @@
                     <!-- Subtitle Panel -->
                     <div class="col-lg-4 col-xl-3">
                         <div class="subtitle-panel h-100 d-flex flex-column">
-                            <!-- Global Styles Section -->
-                            <div class="global-styles-panel">
-                                <div class="panel-header border-0">
-                                    <h6 class="mb-0"><i class="fas fa-globe me-2"></i>Global Styles</h6>
-                                    <button class="btn btn-sm btn-gold" @click="applyGlobalStyles" title="Apply to all subtitles">
-                                        Apply All
-                                    </button>
-                                </div>
-                                <div class="global-styles-content">
-                                    <div class="row g-2">
-                                        <div class="col-4">
-                                            <label class="form-label small">Font Size</label>
-                                            <input type="number" class="form-control form-control-sm" v-model="globalStyles.fontSize" min="10" max="72">
-                                        </div>
-                                        <div class="col-4">
-                                            <label class="form-label small">Font</label>
-                                            <select class="form-select form-select-sm" v-model="globalStyles.fontFamily">
-                                                <option value="Inter">Inter</option>
-                                                <option value="Playfair Display">Playfair</option>
-                                                <option value="Arial">Arial</option>
-                                                <option value="Helvetica">Helvetica</option>
-                                                <option value="Georgia">Georgia</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-4">
-                                            <label class="form-label small">Position</label>
-                                            <select class="form-select form-select-sm" v-model="globalStyles.position">
-                                                <option value="bottom">Bottom</option>
-                                                <option value="top">Top</option>
-                                                <option value="center">Center</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row g-2 mt-1">
-                                        <div class="col-6">
-                                            <label class="form-label small">Text Color</label>
-                                            <input type="color" class="form-control form-control-color w-100" v-model="globalStyles.textColor">
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="form-label small">BG Color</label>
-                                            <input type="color" class="form-control form-control-color w-100" v-model="globalStyles.bgColor">
-                                        </div>
-                                    </div>
-                                    <div class="row g-2 mt-1">
-                                        <div class="col-12">
-                                            <label class="form-label small">BG Opacity: {{ globalStyles.bgOpacity }}%</label>
-                                            <input type="range" class="form-range" v-model="globalStyles.bgOpacity" min="0" max="100">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
                             <div class="panel-header">
                                 <h5 class="mb-0">Subtitles</h5>
                                 <div class="d-flex gap-2">
@@ -500,6 +465,71 @@
         </div>
     </div>
 
+    <!-- Global Styles Dialog -->
+        <div v-if="showGlobalStylesDialog" class="modal-overlay" @click.self="showGlobalStylesDialog = false">
+            <div class="settings-dialog glass">
+                <div class="dialog-header">
+                    <h5 class="mb-0"><i class="fas fa-sliders-h me-2"></i>Subtitle Settings</h5>
+                    <button class="btn btn-close btn-close-white" @click="showGlobalStylesDialog = false"></button>
+                </div>
+                <div class="dialog-body">
+                    <p class="text-muted small mb-3">Apply settings to all subtitles at once.</p>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Font Size</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="number" class="form-control" v-model="globalStyles.fontSize" min="10" max="72" style="width: 80px;">
+                            <span class="text-muted">px</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Font Family</label>
+                        <select class="form-select" v-model="globalStyles.fontFamily">
+                            <option value="Inter">Inter</option>
+                            <option value="Playfair Display">Playfair Display</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Position</label>
+                        <select class="form-select" v-model="globalStyles.position">
+                            <option value="bottom">Bottom</option>
+                            <option value="top">Top</option>
+                            <option value="center">Center</option>
+                        </select>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Text Color</label>
+                            <input type="color" class="form-control form-control-color w-100" v-model="globalStyles.textColor">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Background Color</label>
+                            <input type="color" class="form-control form-control-color w-100" v-model="globalStyles.bgColor">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Background Opacity: {{ globalStyles.bgOpacity }}%</label>
+                        <input type="range" class="form-range" v-model="globalStyles.bgOpacity" min="0" max="100">
+                    </div>
+                </div>
+                <div class="dialog-footer">
+                    <button class="btn btn-outline-light" @click="showGlobalStylesDialog = false">Cancel</button>
+                    <button class="btn btn-gold" @click="applyGlobalStyles(); showGlobalStylesDialog = false">
+                        <i class="fas fa-check me-1"></i>Apply to All
+                    </button>
+                </div>
+            </div>
+        </div>
+    
     <!-- Vue.js -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- Bootstrap JS -->

@@ -32,6 +32,7 @@ const app = createApp({
             
             // Dialog State
             showEditDialog: false,
+            showGlobalStylesDialog: false,
             editingSubtitle: {
                 text: '',
                 startTime: '00:00:00,000',
