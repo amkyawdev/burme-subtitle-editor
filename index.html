@@ -178,6 +178,58 @@
                     <!-- Subtitle Panel -->
                     <div class="col-lg-4 col-xl-3">
                         <div class="subtitle-panel h-100 d-flex flex-column">
+                            <!-- Global Styles Section -->
+                            <div class="global-styles-panel">
+                                <div class="panel-header border-0">
+                                    <h6 class="mb-0"><i class="fas fa-globe me-2"></i>Global Styles</h6>
+                                    <button class="btn btn-sm btn-gold" @click="applyGlobalStyles" title="Apply to all subtitles">
+                                        Apply All
+                                    </button>
+                                </div>
+                                <div class="global-styles-content">
+                                    <div class="row g-2">
+                                        <div class="col-4">
+                                            <label class="form-label small">Font Size</label>
+                                            <input type="number" class="form-control form-control-sm" v-model="globalStyles.fontSize" min="10" max="72">
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label small">Font</label>
+                                            <select class="form-select form-select-sm" v-model="globalStyles.fontFamily">
+                                                <option value="Inter">Inter</option>
+                                                <option value="Playfair Display">Playfair</option>
+                                                <option value="Arial">Arial</option>
+                                                <option value="Helvetica">Helvetica</option>
+                                                <option value="Georgia">Georgia</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label small">Position</label>
+                                            <select class="form-select form-select-sm" v-model="globalStyles.position">
+                                                <option value="bottom">Bottom</option>
+                                                <option value="top">Top</option>
+                                                <option value="center">Center</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-1">
+                                        <div class="col-6">
+                                            <label class="form-label small">Text Color</label>
+                                            <input type="color" class="form-control form-control-color w-100" v-model="globalStyles.textColor">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label small">BG Color</label>
+                                            <input type="color" class="form-control form-control-color w-100" v-model="globalStyles.bgColor">
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-1">
+                                        <div class="col-12">
+                                            <label class="form-label small">BG Opacity: {{ globalStyles.bgOpacity }}%</label>
+                                            <input type="range" class="form-range" v-model="globalStyles.bgOpacity" min="0" max="100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="panel-header">
                                 <h5 class="mb-0">Subtitles</h5>
                                 <div class="d-flex gap-2">

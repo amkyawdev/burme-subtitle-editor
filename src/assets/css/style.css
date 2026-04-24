@@ -515,6 +515,25 @@ a:hover {
     flex-direction: column;
 }
 
+.global-styles-panel {
+    background: var(--gray-dark);
+    border-bottom: 2px solid var(--gold);
+}
+
+.global-styles-panel .panel-header {
+    background: var(--glass);
+    padding: 0.5rem 1rem;
+}
+
+.global-styles-panel .panel-header h6 {
+    font-size: 0.9rem;
+    color: var(--gold);
+}
+
+.global-styles-content {
+    padding: 0.75rem 1rem;
+}
+
 .panel-header {
     padding: 1rem;
     border-bottom: 1px solid var(--glass-border);

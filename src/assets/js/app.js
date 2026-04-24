@@ -44,6 +44,16 @@ const app = createApp({
                 position: 'bottom'
             },
             
+            // Global Styles for all subtitles
+            globalStyles: {
+                fontSize: 24,
+                fontFamily: 'Inter',
+                textColor: '#ffffff',
+                bgColor: '#000000',
+                bgOpacity: 50,
+                position: 'bottom'
+            },
+            
             // Default subtitle style
             defaultSubtitleStyle: {
                 fontSize: '24px',
@@ -404,12 +414,12 @@ const app = createApp({
                 text: 'New subtitle',
                 start: currentPos,
                 end: currentPos + 3000,
-                fontSize: 24,
-                fontFamily: 'Inter',
-                textColor: '#ffffff',
-                bgColor: '#000000',
-                bgOpacity: 50,
-                position: 'bottom'
+                fontSize: this.globalStyles.fontSize,
+                fontFamily: this.globalStyles.fontFamily,
+                textColor: this.globalStyles.textColor,
+                bgColor: this.globalStyles.bgColor,
+                bgOpacity: this.globalStyles.bgOpacity,
+                position: this.globalStyles.position
             };
             
             this.subtitles.push(newSubtitle);
@@ -417,6 +427,18 @@ const app = createApp({
             
             // Open edit dialog
             this.editSubtitle(this.subtitles.length - 1);
+        },
+        
+        applyGlobalStyles() {
+            // Apply global styles to all subtitles
+            this.subtitles.forEach(sub => {
+                sub.fontSize = this.globalStyles.fontSize;
+                sub.fontFamily = this.globalStyles.fontFamily;
+                sub.textColor = this.globalStyles.textColor;
+                sub.bgColor = this.globalStyles.bgColor;
+                sub.bgOpacity = this.globalStyles.bgOpacity;
+                sub.position = this.globalStyles.position;
+            });
         },
         
         selectSubtitle(index) {
@@ -531,6 +553,9 @@ const app = createApp({
             // Reset subtitles
             this.subtitles = [];
             
+            // Get video duration for sync check
+            const videoDurationMs = this.videoDuration * 1000;
+            
             // Normalize line endings
             content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
             
@@ -565,17 +590,25 @@ const app = createApp({
                     text: text,
                     start: startMs,
                     end: endMs,
-                    fontSize: 24,
-                    fontFamily: 'Inter',
-                    textColor: '#ffffff',
-                    bgColor: '#000000',
-                    bgOpacity: 50,
-                    position: 'bottom'
+                    fontSize: this.globalStyles.fontSize,
+                    fontFamily: this.globalStyles.fontFamily,
+                    textColor: this.globalStyles.textColor,
+                    bgColor: this.globalStyles.bgColor,
+                    bgOpacity: this.globalStyles.bgOpacity,
+                    position: this.globalStyles.position
                 });
             });
             
             // Sort by start time
             this.subtitles.sort((a, b) => a.start - b.start);
+            
+            // Sync check - show warning if SRT times don't match video
+            if (videoDurationMs > 0) {
+                const lastSub = this.subtitles[this.subtitles.length - 1];
+                if (lastSub && lastSub.end > videoDurationMs) {
+                    console.warn('SRT file times may not match video duration. Consider adjusting subtitle timings.');
+                }
+            }
         },
         
         // ======================
