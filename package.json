@@ -1,0 +1,28 @@
+{
+  "name": "burme-subtitle-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Professional web-based video subtitle editor with live stream editing and SRT export",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "subtitle",
+    "video",
+    "editor",
+    "srt",
+    "vue"
+  ],
+  "author": "Burme",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  }
+}
