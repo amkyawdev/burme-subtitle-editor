@@ -1,10 +1,7 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig(({ mode }) => {
-  // Load env file based on mode
-  const env = loadEnv(mode, process.cwd(), '');
-  
   return {
     plugins: [vue()],
     build: {
@@ -26,7 +23,7 @@ export default defineConfig(({ mode }) => {
     },
     // Define environment variables for Vercel
     define: {
-      'import.meta.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL || 'https://burme-subtitle-api.hf.space'),
+      'import.meta.env.VITE_API_URL': JSON.stringify('https://huggingface.co/spaces/amkyawdev/burme-subtitle-api'),
     },
   };
 });
