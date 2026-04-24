@@ -114,12 +114,19 @@
                 <div class="row g-0" style="height: calc(100vh - 56px);">
                     <!-- Video Player Section -->
                     <div class="col-lg-8 col-xl-9">
-                        <div class="video-section h-100">
-                            <div class="video-wrapper">
-                                <video ref="videoPlayer" @timeupdate="onTimeUpdate" @loadedmetadata="onVideoLoaded" class="video-element">
-                                    <source src="" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
+                        <input type="file" ref="videoFileInput" @change="onVideoFileSelect" accept="video/*" style="display: none;">
+                            <div class="video-section h-100">
+                                <div class="video-wrapper" @dragover.prevent @drop.prevent="onVideoDrop" @click="$refs.videoFileInput.click()">
+                                    <video ref="videoPlayer" v-show="videoSrc" @timeupdate="onTimeUpdate" @loadedmetadata="onVideoLoaded" class="video-element" :src="videoSrc">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <!-- Empty State / Drop Zone -->
+                                    <div v-if="!videoSrc" class="video-empty-state">
+                                        <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                                        <h4>Drop video here</h4>
+                                        <p class="mb-3">or click to browse</p>
+                                        <p class="text-muted small">Supports MP4, WebM, MOV</p>
+                                    </div>
                                 <!-- Subtitle Overlay -->
                                 <div class="subtitle-overlay" v-if="currentSubtitle" :style="subtitleOverlayStyle">
                                     <span :style="currentSubtitleStyle">{{ currentSubtitle.text }}</span>

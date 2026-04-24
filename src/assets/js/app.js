@@ -165,6 +165,31 @@ const app = createApp({
         // Video Player Methods
         // ======================
         
+        onVideoFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.loadVideoFile(file);
+            }
+        },
+        
+        onVideoDrop(event) {
+            const file = event.dataTransfer.files[0];
+            if (file && file.type.startsWith('video/')) {
+                this.loadVideoFile(file);
+            }
+        },
+        
+        loadVideoFile(file) {
+            const url = URL.createObjectURL(file);
+            this.videoSrc = url;
+            // Wait for video to load then update duration
+            this.$nextTick(() => {
+                if (this.videoPlayer) {
+                    this.videoPlayer.load();
+                }
+            });
+        },
+        
         onVideoLoaded() {
             if (this.videoPlayer) {
                 this.videoDuration = this.videoPlayer.duration;
