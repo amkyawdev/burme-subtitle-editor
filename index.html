@@ -128,7 +128,7 @@
                                         <p class="text-muted small">Supports MP4, WebM, MOV</p>
                                     </div>
                                 <!-- Subtitle Overlay -->
-                                <div class="subtitle-overlay" v-if="currentSubtitle" :style="subtitleOverlayStyle">
+                                <div class="subtitle-overlay" v-if="currentSubtitle && showSubtitleOverlay" :style="subtitleOverlayStyle">
                                     <span :style="currentSubtitleStyle">{{ currentSubtitle.text }}</span>
                                 </div>
                             </div>
@@ -139,6 +139,9 @@
                                     </button>
                                     <input type="range" class="timeline-slider" min="0" :max="videoDuration" v-model="currentTime" @input="seekVideo">
                                     <span class="time-display">{{ formatTime(currentTime) }} / {{ formatTime(videoDuration) }}</span>
+                                    <button class="btn btn-icon" @click="toggleSubtitleOverlay" :class="{ 'text-gold': showSubtitleOverlay }">
+                                        <i class="fas fa-closed-captioning"></i>
+                                    </button>
                                     <button class="btn btn-icon" @click="toggleFullscreen">
                                         <i class="fas fa-expand"></i>
                                     </button>

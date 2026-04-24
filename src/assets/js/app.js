@@ -22,6 +22,7 @@ const app = createApp({
             subtitles: [],
             selectedSubtitleIndex: -1,
             currentSubtitle: null,
+            showSubtitleOverlay: true,
             
             // Dialog State
             showEditDialog: false,
@@ -221,6 +222,10 @@ const app = createApp({
                 this.videoPlayer.play();
             }
             this.isPlaying = !this.isPlaying;
+        },
+        
+        toggleSubtitleOverlay() {
+            this.showSubtitleOverlay = !this.showSubtitleOverlay;
         },
         
         seekVideo() {
