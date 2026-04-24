@@ -66,6 +66,11 @@ const app = createApp({
     },
     
     computed: {
+        // Video duration in milliseconds for timeline binding
+        videoDurationMs() {
+            return this.videoDuration * 1000;
+        },
+        
         // Dynamic subtitle overlay style based on current subtitle
         subtitleOverlayStyle() {
             if (!this.currentSubtitle) return {};

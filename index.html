@@ -135,10 +135,10 @@
                             <div class="video-controls">
                                 <!-- Timeline Bar (Top) -->
                                 <div class="timeline-section mb-2">
-                                    <input type="range" class="timeline-slider w-100" min="0" :max="videoDuration" v-model="currentTime" @input="seekVideo">
+                                    <input type="range" class="timeline-slider w-100" min="0" :max="videoDurationMs" v-model="currentTime" @input="seekVideo">
                                     <div class="d-flex justify-content-between time-display">
                                         <span>{{ formatTime(currentTime) }}</span>
-                                        <span>{{ formatTime(videoDuration) }}</span>
+                                        <span>{{ formatTime(videoDurationMs) }}</span>
                                     </div>
                                 </div>
                                 
