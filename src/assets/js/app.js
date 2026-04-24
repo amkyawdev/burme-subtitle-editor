@@ -3,17 +3,11 @@
  * Vue.js 3 Application
  */
 
-import { createApp } from 'vue';
-
-// API Base URL from environment variable
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://burme-subtitle-api.hf.space';
+const { createApp } = Vue;
 
 const app = createApp({
     data() {
         return {
-            // API Configuration
-            apiBaseUrl: API_BASE_URL,
-            
             // Page Navigation
             currentPage: 'home',
             
