@@ -115,9 +115,15 @@ const app = createApp({
             this.currentTime = 0;
             this.videoSrc = '';
             this.isPlaying = false;
+            this.videoPlayer = null;
             
             // Go to edit page
             this.currentPage = 'edit';
+            
+            // Re-initialize video player after DOM update
+            this.$nextTick(() => {
+                this.videoPlayer = this.$refs.videoPlayer;
+            });
         },
         
         loadSampleProject() {
@@ -192,6 +198,7 @@ const app = createApp({
         },
         
         onVideoLoaded() {
+            this.videoPlayer = this.$refs.videoPlayer;
             if (this.videoPlayer) {
                 this.videoDuration = this.videoPlayer.duration;
             }
@@ -214,14 +221,21 @@ const app = createApp({
         },
         
         togglePlay() {
-            if (!this.videoPlayer) return;
-            
-            if (this.isPlaying) {
-                this.videoPlayer.pause();
-            } else {
-                this.videoPlayer.play();
-            }
-            this.isPlaying = !this.isPlaying;
+            // Use $nextTick to ensure DOM is ready
+            this.$nextTick(() => {
+                this.videoPlayer = this.$refs.videoPlayer;
+                
+                if (!this.videoPlayer) {
+                    return;
+                }
+                
+                if (this.isPlaying) {
+                    this.videoPlayer.pause();
+                } else {
+                    this.videoPlayer.play();
+                }
+                this.isPlaying = !this.isPlaying;
+            });
         },
         
         toggleSubtitleOverlay() {
