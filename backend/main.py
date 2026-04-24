@@ -265,6 +265,163 @@ async def scale_subtitles(subtitles: List[Dict[str, Any]], scale_factor: float =
     }
 
 
+@app.post("/api/subtitles/merge")
+async def merge_subtitles(
+    subtitles1: List[Dict[str, Any]] = Form([]),
+    subtitles2: List[Dict[str, Any]] = Form([]),
+    offset2: int = Form(0)
+):
+    """
+    Merge two subtitle tracks with optional offset
+    
+    Args:
+        subtitles1: First subtitle track
+        subtitles2: Second subtitle track
+        offset2: Time offset in ms for second track
+        
+    Returns:
+        Merged subtitles
+    """
+    merged = []
+    
+    # Add first track
+    for sub in subtitles1:
+        merged.append(sub.copy())
+    
+    # Add second track with offset
+    for sub in subtitles2:
+        new_sub = sub.copy()
+        new_sub["start"] = max(0, sub.get("start", 0) + offset2)
+        new_sub["end"] = max(0, sub.get("end", 0) + offset2)
+        merged.append(new_sub)
+    
+    # Sort by start time
+    merged.sort(key=lambda x: x["start"])
+    
+    return {
+        "success": True,
+        "total_count": len(merged),
+        "subtitles": merged
+    }
+
+
+@app.post("/api/subtitles/split")
+async def split_subtitles(subtitles: List[Dict[str, Any]], split_at: int = Form(0)):
+    """
+    Split subtitles into two parts at given timestamp
+    
+    Args:
+        subtitles: List of subtitle dictionaries
+        split_at: Timestamp to split at (ms)
+        
+    Returns:
+        Two sets of subtitles
+    """
+    part1 = []
+    part2 = []
+    
+    for sub in subtitles:
+        if sub.get("end", 0) <= split_at:
+            part1.append(sub)
+        elif sub.get("start", 0) >= split_at:
+            part2.append(sub)
+        else:
+            # Subtitle spans the split point - keep in first part
+            part1.append(sub)
+    
+    return {
+        "success": True,
+        "part1": part1,
+        "part2": part2,
+        "split_at": split_at
+    }
+
+
+@app.post("/api/subtitles/gap-fill")
+async def fill_gaps(
+    subtitles: List[Dict[str, Any]],
+    min_gap: int = Form(100),
+    default_duration: int = Form(2000)
+):
+    """
+    Fill gaps between subtitles
+    
+    Args:
+        subtitles: List of subtitle dictionaries
+        min_gap: Minimum gap size to consider (ms)
+        default_duration: Default duration for filled gaps (ms)
+        
+    Returns:
+        Subtitles with gaps filled
+    """
+    if not subtitles:
+        return {"success": True, "subtitles": [], "filled_count": 0}
+    
+    # Sort by start time
+    sorted_subs = sorted(subtitles.copy(), key=lambda x: x.get("start", 0))
+    
+    result = []
+    filled_count = 0
+    
+    for i, sub in enumerate(sorted_subs):
+        result.append(sub.copy())
+        
+        # Check gap to next subtitle
+        if i < len(sorted_subs) - 1:
+            next_sub = sorted_subs[i + 1]
+            gap = next_sub.get("start", 0) - sub.get("end", 0)
+            
+            if gap >= min_gap and gap < default_duration * 2:
+                filled_count += 1
+    
+    return {
+        "success": True,
+        "subtitles": result,
+        "filled_count": filled_count
+    }
+
+
+# ======================
+# File Upload Endpoint
+# ======================
+
+@app.post("/api/files/upload")
+async def upload_file(file: UploadFile = File(...)):
+    """
+    Handle file upload
+    
+    Args:
+        file: Uploaded file
+        
+    Returns:
+        File info
+    """
+    content = await file.read()
+    file_size = len(content)
+    
+    # Check file type
+    if file.filename.endswith('.srt'):
+        # Parse and return subtitles
+        try:
+            srt_content = content.decode('utf-8')
+            parsed = parse_srt(srt_content)
+            return {
+                "success": True,
+                "filename": file.filename,
+                "file_size": file_size,
+                "subtitle_count": len(parsed),
+                "subtitles": [sub.dict() for sub in parsed]
+            }
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Failed to parse SRT: {str(e)}")
+    
+    return {
+        "success": True,
+        "filename": file.filename,
+        "file_size": file_size
+    }
+
+
 # ======================
 # Helper Functions
 # ======================
