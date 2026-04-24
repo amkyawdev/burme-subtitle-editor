@@ -154,9 +154,15 @@
                         <div class="subtitle-panel h-100 d-flex flex-column">
                             <div class="panel-header">
                                 <h5 class="mb-0">Subtitles</h5>
-                                <button class="btn btn-sm btn-gold" @click="addNewSubtitle">
-                                    <i class="fas fa-plus me-1"></i>Add
-                                </button>
+                                <div class="d-flex gap-2">
+                                    <input type="file" ref="srtFileInput" @change="importSRT" accept=".srt" style="display: none;">
+                                    <button class="btn btn-sm btn-outline-secondary" @click="$refs.srtFileInput.click()">
+                                        <i class="fas fa-file-import me-1"></i>Import
+                                    </button>
+                                    <button class="btn btn-sm btn-gold" @click="addNewSubtitle">
+                                        <i class="fas fa-plus me-1"></i>Add
+                                    </button>
+                                </div>
                             </div>
                             <div class="subtitle-list flex-grow-1 overflow-auto">
                                 <div v-for="(subtitle, index) in subtitles" :key="index" 

@@ -400,6 +400,72 @@ const app = createApp({
             URL.revokeObjectURL(url);
         },
         
+        importSRT(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                this.parseSRT(content);
+            };
+            reader.readAsText(file);
+            
+            // Reset input
+            event.target.value = '';
+        },
+        
+        parseSRT(content) {
+            // Reset subtitles
+            this.subtitles = [];
+            
+            // Normalize line endings
+            content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+            
+            // Split into blocks
+            const blocks = content.trim().split(/\n\n+/);
+            
+            blocks.forEach(block => {
+                const lines = block.split('\n');
+                if (lines.length < 3) return;
+                
+                // Parse index (line 0) - may not exist if subtitle text contains blank lines
+                let timeLineIndex = 0;
+                let textStartIndex = 2;
+                
+                // Check if first line is a number
+                if (/^\d+$/.test(lines[0].trim())) {
+                    timeLineIndex = 1;
+                    textStartIndex = 2;
+                }
+                
+                // Parse timing line: 00:00:00,000 --> 00:00:00,000
+                const timeMatch = lines[timeLineIndex].match(/(\d{2}):(\d{2}):(\d{2}),(\d{3})\s*-->\s*(\d{2}):(\d{2}):(\d{2}),(\d{3})/);
+                if (!timeMatch) return;
+                
+                const startMs = (parseInt(timeMatch[1]) * 3600 + parseInt(timeMatch[2]) * 60 + parseInt(timeMatch[3])) * 1000 + parseInt(timeMatch[4]);
+                const endMs = (parseInt(timeMatch[5]) * 3600 + parseInt(timeMatch[6]) * 60 + parseInt(timeMatch[7])) * 1000 + parseInt(timeMatch[8]);
+                
+                // Get text (remaining lines)
+                const text = lines.slice(textStartIndex).join('\n');
+                
+                this.subtitles.push({
+                    text: text,
+                    start: startMs,
+                    end: endMs,
+                    fontSize: 24,
+                    fontFamily: 'Inter',
+                    textColor: '#ffffff',
+                    bgColor: '#000000',
+                    bgOpacity: 50,
+                    position: 'bottom'
+                });
+            });
+            
+            // Sort by start time
+            this.subtitles.sort((a, b) => a.start - b.start);
+        },
+        
         // ======================
         // Keyboard Shortcuts
         // ======================
