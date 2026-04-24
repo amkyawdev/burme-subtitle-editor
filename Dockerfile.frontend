@@ -1,0 +1,18 @@
+# Use nginx Alpine for lightweight static file serving
+FROM nginx:alpine
+
+# Remove default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/burme.conf
+
+# Copy frontend files
+COPY index.html /usr/share/nginx/html/
+COPY src /usr/share/nginx/html/src
+
+# Expose port
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2E2E2E"/>
+      <stop offset="100%" style="stop-color:#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E5C158"/>
+      <stop offset="50%" style="stop-color:#D4AF37"/>
+      <stop offset="100%" style="stop-color:#B8962E"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  
+  <!-- Subtitle bracket - left -->
+  <path d="M140 120 L140 392" stroke="url(#gold)" stroke-width="24" fill="none" stroke-linecap="round"/>
+  <path d="M140 120 L180 120" stroke="url(#gold)" stroke-width="24" fill="none" stroke-linecap="round"/>
+  <path d="M140 392 L180 392" stroke="url(#gold)" stroke-width="24" fill="none" stroke-linecap="round"/>
+  
+  <!-- Subtitle bracket - right -->
+  <path d="M372 120 L372 392" stroke="url(#gold)" stroke-width="24" fill="none" stroke-linecap="round"/>
+  <path d="M332 120 L372 120" stroke="url(#gold)" stroke-width="24" fill="none" stroke-linecap="round"/>
+  <path d="M332 392 L372 392" stroke="url(#gold)" stroke-width="24" fill="none" stroke-linecap="round"/>
+  
+  <!-- Center line/timeline -->
+  <rect x="180" y="246" width="152" height="20" rx="10" fill="url(#gold)"/>
+  
+  <!-- Play/Edit indicator -->
+  <polygon points="246,200 246,312 330,256" fill="url(#gold)"/>
+</svg>
