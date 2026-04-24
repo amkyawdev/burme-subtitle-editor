@@ -66,7 +66,7 @@ const app = createApp({
     },
     
     computed: {
-        // Video duration in milliseconds for timeline binding
+        // Video duration in milliseconds for timeline binding (method for reactivity)
         videoDurationMs() {
             return this.videoDuration * 1000;
         },
