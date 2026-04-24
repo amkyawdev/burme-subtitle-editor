@@ -391,7 +391,7 @@
         </div>
 
         <!-- Subtitle Edit Dialog -->
-        <div v-if="showEditDialog" class="dialog-overlay" @click.self="closeEditDialog">
+        <div v-if="showEditDialog && currentPage === 'edit'" class="dialog-overlay" @click.self="closeEditDialog">
             <div class="edit-dialog glass">
                 <div class="dialog-header">
                     <h5 class="mb-0">Edit Subtitle</h5>
@@ -464,8 +464,8 @@
             </div>
         </div>
         
-        <!-- Global Styles Dialog -->
-        <div v-if="showGlobalStylesDialog" class="modal-overlay" @click.self="showGlobalStylesDialog = false">
+        <!-- Global Styles Dialog (only show in editor) -->
+        <div v-if="showGlobalStylesDialog && currentPage === 'edit'" class="modal-overlay" @click.self="showGlobalStylesDialog = false">
             <div class="settings-dialog glass">
                 <div class="dialog-header">
                     <h5 class="mb-0"><i class="fas fa-sliders-h me-2"></i>Subtitle Settings</h5>
