@@ -133,16 +133,42 @@
                                 </div>
                             </div>
                             <div class="video-controls">
-                                <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <!-- Playback Controls -->
+                                    <button class="btn btn-icon" @click="skipBackward" title="Skip -5s">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
                                     <button class="btn btn-icon" @click="togglePlay">
                                         <i :class="isPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
                                     </button>
+                                    <button class="btn btn-icon" @click="skipForward" title="Skip +5s">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    
+                                    <!-- Timeline -->
                                     <input type="range" class="timeline-slider" min="0" :max="videoDuration" v-model="currentTime" @input="seekVideo">
                                     <span class="time-display">{{ formatTime(currentTime) }} / {{ formatTime(videoDuration) }}</span>
-                                    <button class="btn btn-icon" @click="toggleSubtitleOverlay" :class="{ 'text-gold': showSubtitleOverlay }">
+                                    
+                                    <!-- Volume -->
+                                    <div class="volume-control">
+                                        <button class="btn btn-icon" @click="toggleMute">
+                                            <i :class="isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'"></i>
+                                        </button>
+                                        <input type="range" class="volume-slider" min="0" max="100" v-model="volume" @input="setVolume">
+                                    </div>
+                                    
+                                    <!-- Subtitle Toggle -->
+                                    <button class="btn btn-icon" @click="toggleSubtitleOverlay" :class="{ 'text-gold': showSubtitleOverlay }" title="Toggle Subtitles">
                                         <i class="fas fa-closed-captioning"></i>
                                     </button>
-                                    <button class="btn btn-icon" @click="toggleFullscreen">
+                                    
+                                    <!-- Playback Speed -->
+                                    <button class="btn btn-icon" @click="cyclePlaybackSpeed" title="Playback Speed">
+                                        <span class="small">{{ playbackSpeed }}x</span>
+                                    </button>
+                                    
+                                    <!-- Fullscreen -->
+                                    <button class="btn btn-icon" @click="toggleFullscreen" title="Fullscreen">
                                         <i class="fas fa-expand"></i>
                                     </button>
                                 </div>

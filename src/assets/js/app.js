@@ -24,6 +24,12 @@ const app = createApp({
             currentSubtitle: null,
             showSubtitleOverlay: true,
             
+            // Playback Controls
+            volume: 100,
+            isMuted: false,
+            playbackSpeed: 1,
+            playbackSpeeds: [0.5, 0.75, 1, 1.25, 1.5, 2],
+            
             // Dialog State
             showEditDialog: false,
             editingSubtitle: {
@@ -293,6 +299,59 @@ const app = createApp({
         
         toggleSubtitleOverlay() {
             this.showSubtitleOverlay = !this.showSubtitleOverlay;
+        },
+        
+        skipBackward() {
+            this.$nextTick(() => {
+                this.videoPlayer = this.$refs.videoPlayer;
+                if (this.videoPlayer) {
+                    this.videoPlayer.currentTime = Math.max(0, this.videoPlayer.currentTime - 5);
+                    this.currentTime = this.videoPlayer.currentTime * 1000;
+                }
+            });
+        },
+        
+        skipForward() {
+            this.$nextTick(() => {
+                this.videoPlayer = this.$refs.videoPlayer;
+                if (this.videoPlayer) {
+                    this.videoPlayer.currentTime = Math.min(this.videoDuration, this.videoPlayer.currentTime + 5);
+                    this.currentTime = this.videoPlayer.currentTime * 1000;
+                }
+            });
+        },
+        
+        toggleMute() {
+            this.$nextTick(() => {
+                this.videoPlayer = this.$refs.videoPlayer;
+                if (this.videoPlayer) {
+                    this.isMuted = !this.isMuted;
+                    this.videoPlayer.muted = this.isMuted;
+                }
+            });
+        },
+        
+        setVolume() {
+            this.$nextTick(() => {
+                this.videoPlayer = this.$refs.videoPlayer;
+                if (this.videoPlayer) {
+                    this.videoPlayer.volume = this.volume / 100;
+                    this.isMuted = this.volume === 0;
+                }
+            });
+        },
+        
+        cyclePlaybackSpeed() {
+            const currentIndex = this.playbackSpeeds.indexOf(this.playbackSpeed);
+            const nextIndex = (currentIndex + 1) % this.playbackSpeeds.length;
+            this.playbackSpeed = this.playbackSpeeds[nextIndex];
+            
+            this.$nextTick(() => {
+                this.videoPlayer = this.$refs.videoPlayer;
+                if (this.videoPlayer) {
+                    this.videoPlayer.playbackRate = this.playbackSpeed;
+                }
+            });
         },
         
         seekVideo() {
