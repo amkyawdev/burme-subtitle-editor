@@ -173,16 +173,69 @@ const app = createApp({
         // ======================
         
         onVideoFileSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.loadVideoFile(file);
+            const files = event.target.files;
+            if (files.length > 0) {
+                // Find video and SRT files
+                let videoFile = null;
+                let srtFile = null;
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.startsWith('video/')) {
+                        videoFile = file;
+                    } else if (file.name.endsWith('.srt')) {
+                        srtFile = file;
+                    }
+                }
+                
+                // Load video first
+                if (videoFile) {
+                    this.loadVideoFile(videoFile);
+                }
+                
+                // Auto-load SRT if found
+                if (srtFile) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.parseSRT(e.target.result);
+                    };
+                    reader.readAsText(srtFile);
+                } else if (videoFile) {
+                    // Show hint about SRT naming
+                    const baseName = videoFile.name.replace(/\.[^/.]+$/, '');
+                    console.log('Tip: Name your SRT file "' + baseName + '.srt" and select it together with your video file.');
+                }
             }
+            // Reset input
+            event.target.value = '';
         },
         
         onVideoDrop(event) {
-            const file = event.dataTransfer.files[0];
-            if (file && file.type.startsWith('video/')) {
-                this.loadVideoFile(file);
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                let videoFile = null;
+                let srtFile = null;
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.startsWith('video/')) {
+                        videoFile = file;
+                    } else if (file.name.endsWith('.srt')) {
+                        srtFile = file;
+                    }
+                }
+                
+                if (videoFile) {
+                    this.loadVideoFile(videoFile);
+                }
+                
+                if (srtFile) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.parseSRT(e.target.result);
+                    };
+                    reader.readAsText(srtFile);
+                }
             }
         },
         

@@ -114,7 +114,7 @@
                 <div class="row g-0" style="height: calc(100vh - 56px);">
                     <!-- Video Player Section -->
                     <div class="col-lg-8 col-xl-9">
-                        <input type="file" ref="videoFileInput" @change="onVideoFileSelect" accept="video/*" style="display: none;">
+                        <input type="file" ref="videoFileInput" @change="onVideoFileSelect" accept="video/*,.srt" style="display: none;">
                             <div class="video-section h-100">
                                 <div class="video-wrapper" @dragover.prevent @drop.prevent="onVideoDrop" @click="$refs.videoFileInput.click()">
                                     <video ref="videoPlayer" v-show="videoSrc" @timeupdate="onTimeUpdate" @loadedmetadata="onVideoLoaded" class="video-element" :src="videoSrc">
