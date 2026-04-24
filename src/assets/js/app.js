@@ -397,6 +397,18 @@ const app = createApp({
             return `${pad(hours)}:${pad(minutes)}:${pad(seconds)},${milliseconds.toString().padStart(3, '0')}`;
         },
         
+        // Format time for display (00:00:00.000)
+        formatTimeDisplay(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            const milliseconds = Math.floor((ms % 1000));
+            
+            const pad = (n) => n.toString().padStart(2, '0');
+            return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${milliseconds.toString().padStart(3, '0')}`;
+        },
+        
         parseTime(timeStr) {
             // Parse SRT format time (00:00:00,000) to milliseconds
             const match = timeStr.match(/(\d{2}):(\d{2}):(\d{2}),(\d{3})/);
